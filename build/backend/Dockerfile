@@ -1,0 +1,7 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=Group_22_CS306
+ENV MYSQL_DATABASE=judo_federation
+
+EXPOSE 3306
+
