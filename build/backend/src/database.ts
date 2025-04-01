@@ -1,5 +1,4 @@
-import { createConnection, createPool, QueryResult } from "mysql2";
-import { connection } from ".";
+import { createConnection } from "mysql2";
 
 export function connect() {
 	if (
@@ -15,37 +14,15 @@ export function connect() {
 		port: parseInt(process.env.DB_PORT ?? "3306"),
 		user: process.env.DB_USR,
 		password: process.env.DB_PSW,
+		database: process.env.DB_NAME,
 	});
 
 	connection.connect((e) => {
 		if (e) {
-			throw new Error(e.message);
+			throw new Error("Database connection error: " + e.message);
 		}
 		console.log("Connected to " + process.env.DB_NAME);
 	});
 
-	// const exists = connection.query(
-	// 	"SHOW  databases LIKE '" + process.env.DB_NAME + "'",
-	// 	(err, res, fields) => {
-	// 		// if(!res)
-	// 		//     connection.query(`CREATE DATABASE '${process.env.DB_NAME}'`)
-	// 		// console.log(res);
-	// 		const result = res as object[];
-	// 		return res;
-	// 	}
-	// );
-
-	console.log("exists: ");
-	// console.log(exists);
 	return connection;
-}
-
-export function check() {
-	// const rows = connection.query(
-	// 	`SELECT *
-	//     FROM Judoka`,
-	// 	(err, results, fields) => {
-	// 		console.log(results);
-	// 	}
-	// );
 }

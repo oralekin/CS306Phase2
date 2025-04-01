@@ -1,8 +1,10 @@
-import express, { Request, Response } from "express";
-import mysql, { Pool } from "mysql2";
+import express from "express";
 import dotenv from "dotenv";
-import { createPool } from "mysql2/promise";
-import { check, connect } from "./database";
+import { connect } from "./database";
+import { judokaRouter } from "./services/judokaService";
+import { eventsRouter } from "./services/eventService";
+import { matchRouter } from "./services/matchService";
+import { scoreRouter } from "./services/scoreService";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,15 +12,13 @@ dotenv.config();
 
 app.use(express.json());
 
-console.log(process.env.DB_HOST);
 export const connection = connect();
-check();
 
-// console.log(connection);
 
-app.get("/", (req: Request, res: Response) => {
-	res.send("Welcome to the Node.js + TypeScript API!");
-});
+app.use("/judoka", judokaRouter);
+app.use("/event", eventsRouter);
+app.use("/match", matchRouter);
+app.use("/score", scoreRouter);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
