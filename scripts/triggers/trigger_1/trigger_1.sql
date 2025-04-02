@@ -1,5 +1,5 @@
-delimiter $$
 
+DELIMITER //
 CREATE TRIGGER Check_date BEFORE INSERT ON JudoMatch
 FOR EACH ROW
 BEGIN
@@ -13,10 +13,8 @@ BEGIN
     SIGNAL SQLSTATE '45000' 
     SET MESSAGE_TEXT = 'Match date is incorrect. Please ensure the date is within the event range.';
   END IF;
-END $$
-DELIMITER;
+END//
 
-delimiter $$
 CREATE TRIGGER Check_date_upd BEFORE UPDATE ON JudoMatch
 FOR EACH ROW
 BEGIN
@@ -30,6 +28,6 @@ BEGIN
     SIGNAL SQLSTATE '45000' 
     SET MESSAGE_TEXT = 'Match date is incorrect. Please ensure the date is within the event range.';
   END IF;
-END $$
-DELIMITER;
+END//
 
+DELIMITER ;
