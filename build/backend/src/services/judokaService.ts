@@ -22,6 +22,7 @@ interface User {
 	jWeight: number;
 	canTeach: boolean;
 	belt: EBelt;
+	startDate: Date;
 	addId: number;
 	accId?: number;
 	ascId: number;
