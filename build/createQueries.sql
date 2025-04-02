@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS judo_federation;
+
+use judo_federation;
+
 CREATE TABLE Addresses (
  addId  INT AUTO_INCREMENT PRIMARY KEY,
  street CHAR(40) NOT NULL,
@@ -39,6 +43,7 @@ CREATE TABLE Judoka (
  jWeight  REAL,
  canTeach  BOOLEAN,
  belt  ENUM("white","yellow","orange","green", "blue","brown", "black") DEFAULT "white" NOT NULL,
+ startDate Date NOT NULL,
  addId INT NOT NULL,
  accId  INT NULL,
  ascId  INT NOT NULL,
@@ -157,21 +162,21 @@ INSERT INTO Association (ascId, ascName, email, phone, addId) VALUES
   (8, 'Pisa Samurai Judo', 'info@pisajudo.it', '0501234567', 8),
   (9, 'Verona Judo Center', 'info@veronajudo.it', '0452345678', 9),
   (10, 'Venezia Dojos', 'info@veneziadojos.it', '0413456789', 10);
-INSERT INTO Judoka (jId, jName, gender, birthday, jWeight, canTeach, belt, addId, accId, ascId) VALUES
-  (1, 'John Doe', 'Male', '1990-05-12', 81.2, FALSE, 'black', 1, 1, 2),
-  (2, 'Michael Brown', 'Male', '2007-12-10', 90.0, FALSE, 'black', 3, 2, 2),
-  (3, 'Daniel Harris', 'Male', '2005-06-24', 81.5, FALSE, 'blue', 3, 2, 2),
-  (4, 'Emily Wilson', 'Female', '2000-03-07', 56.8, FALSE, 'blue', 4, 3, 2),
-  (5, 'Emma Clark', 'Female', '2001-04-30', 58.7, FALSE, 'orange', 10, 4, 2),
-  (6, 'Roberto Bianchi', 'Male', '1991-07-15', 85.3, TRUE, 'black', 9, 5, 2),
-  (7, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', 8, 6, 2),
-  (8, 'Sofia Romano', 'Female', '1994-09-22', 62.7, TRUE, 'black', 5, 7, 2),
-  (9, 'Marco Rossi', 'Male', '1989-03-18', 92.1, TRUE, 'black', 7, 8, 2),
-  (10, 'Sarah Davis', 'Female', '2002-09-15', 60.2, FALSE, 'yellow', 6, 9, 2),
-  (11, 'Chris White', 'Male', '1985-02-28', 102.3, FALSE, 'white', 7, 10, 2),
-  (12, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', 8, NULL, 1),
-  (13, 'David Wilson', 'Male', '1993-07-19', 78.4, FALSE, 'green', 4, NULL, 1),
-  (14, 'Jane Smith', 'Female', '1995-08-21', 63.5, FALSE, 'brown', 2, NULL, 1);
+INSERT INTO Judoka (jId, jName, gender, birthday, jWeight, canTeach, belt, startDate, addId, accId, ascId) VALUES
+  (1, 'John Doe', 'Male', '1990-05-12', 81.2, FALSE, 'black', '2007-12-10', 1, 1, 2,),
+  (2, 'Michael Brown', 'Male', '2007-12-10', 90.0, FALSE, 'black', '2007-12-10', 3, 2, 2,),
+  (3, 'Daniel Harris', 'Male', '2005-06-24', 81.5, FALSE, 'blue', '2007-12-10', 3, 2, 2,),
+  (4, 'Emily Wilson', 'Female', '2000-03-07', 56.8, FALSE, 'blue', '2006-12-10', 4, 3, 2,),
+  (5, 'Emma Clark', 'Female', '2001-04-30', 58.7, FALSE, 'orange', '2008-12-10', 10, 4, 2,),
+  (6, 'Roberto Bianchi', 'Male', '1991-07-15', 85.3, TRUE, 'black', '2006-12-10', 9, 5, 2,),
+  (7, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2009-12-10', 8, 6, 2,),
+  (8, 'Sofia Romano', 'Female', '1994-09-22', 62.7, TRUE, 'black', '1999-12-10', 5, 7, 2,),
+  (9, 'Marco Rossi', 'Male', '1989-03-18', 92.1, TRUE, 'black', '1999-12-10', 7, 8, 2,),
+  (10, 'Sarah Davis', 'Female', '2002-09-15', 60.2, FALSE, 'yellow', '2005-12-10', 6, 9, 2,),
+  (11, 'Chris White', 'Male', '1985-02-28', 102.3, FALSE, 'white', '2004-12-10', 7, 10, 2,),
+  (12, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2005-12-10', 8, NULL, 1,),
+  (13, 'David Wilson', 'Male', '1993-07-19', 78.4, FALSE, 'green', '2004-12-10', 4, NULL, 1,),
+  (14, 'Jane Smith', 'Female', '1995-08-21', 63.5, FALSE, 'brown', '2010-12-10', 2, NULL, 1);
 INSERT INTO JudoEvents (eId, eName, price, eType, startDate, endDate, addId, ascId) VALUES
   (1, 'Judo Grand Prix', 50.0, 'Competition', '2025-08-01', '2025-08-02', 1, 2),
   (2, 'International Judo Camp', 30.0, 'Stage', '2025-04-05', '2025-04-07', 2, 2),
@@ -274,4 +279,4 @@ INSERT INTO TeachIn (jId, dId, cAge, cLevel) VALUES
   (8, 7, "Elderly","Beginner"),
   (9, 8, "Elderly","Intermediate"),
   (9, 9, "Elderly","Advanced"),
-  (9,10, "Kids","Advanced");)
+  (9,10, "Kids","Advanced");
