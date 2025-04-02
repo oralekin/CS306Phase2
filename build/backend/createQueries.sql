@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS judo_federation;
+
+USE judo_federation;
+
 CREATE TABLE Addresses (
  addId  INT AUTO_INCREMENT PRIMARY KEY,
  street CHAR(40) NOT NULL,
@@ -39,6 +43,7 @@ CREATE TABLE Judoka (
  jWeight  REAL,
  canTeach  BOOLEAN,
  belt  ENUM("white","yellow","orange","green", "blue","brown", "black") DEFAULT "white" NOT NULL,
+ startDate DATE NOT NULL,
  addId INT NOT NULL,
  accId  INT NULL,
  ascId  INT NOT NULL,
@@ -157,7 +162,7 @@ INSERT INTO Association (ascId, ascName, email, phone, addId) VALUES
   (8, 'Pisa Samurai Judo', 'info@pisajudo.it', '0501234567', 8),
   (9, 'Verona Judo Center', 'info@veronajudo.it', '0452345678', 9),
   (10, 'Venezia Dojos', 'info@veneziadojos.it', '0413456789', 10);
-INSERT INTO Judoka (jId, jName, gender, birthday, jWeight, canTeach, belt, addId, accId, ascId) VALUES
+INSERT INTO Judoka (jId, jName, gender, birthday, jWeight, canTeach, belt, startDate, addId, accId, ascId) VALUES
   (1, 'John Doe', 'Male', '1990-05-12', 81.2, FALSE, 'black', 1, 1, 2),
   (2, 'Michael Brown', 'Male', '2007-12-10', 90.0, FALSE, 'black', 3, 2, 2),
   (3, 'Daniel Harris', 'Male', '2005-06-24', 81.5, FALSE, 'blue', 3, 2, 2),
@@ -274,4 +279,4 @@ INSERT INTO TeachIn (jId, dId, cAge, cLevel) VALUES
   (8, 7, "Elderly","Beginner"),
   (9, 8, "Elderly","Intermediate"),
   (9, 9, "Elderly","Advanced"),
-  (9,10, "Kids","Advanced");)
+  (9,10, "Kids","Advanced");
