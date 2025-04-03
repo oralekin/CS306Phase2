@@ -1,4 +1,7 @@
-import { apiRouter } from "./common";
+import { RowDataPacket } from "mysql2";
+import { connection } from "..";
+import { apiRouter, errFunction } from "./common";
+import { Request, Response } from "express";
 
 enum EEventType {
 	Competition,
@@ -18,3 +21,15 @@ interface JudoEvent {
 }
 
 export const eventsRouter = apiRouter<JudoEvent>("JudoEvents", ["eId"]);
+
+eventsRouter.get("/max/profit", (req: Request, res: Response) => {
+	const query = `CALL maxProfitEvent();`;
+
+	connection
+		.promise()
+		.query(query)
+		.then((result) => {
+			res.status(200).json((result[0] as RowDataPacket[][])[0]);
+		})
+		.catch(errFunction(res));
+});

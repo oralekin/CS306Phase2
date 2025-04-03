@@ -117,6 +117,86 @@ CREATE TABLE TeachIn(
  FOREIGN KEY (dId) REFERENCES Dojo ON DELETE CASCADE
 );
 
+DELIMITER //
+CREATE TRIGGER Check_date BEFORE INSERT ON JudoMatch
+FOR EACH ROW
+BEGIN
+  DECLARE start_event DATE;
+  DECLARE end_event DATE;
+  
+  SELECT startDate INTO start_event FROM JudoEvents WHERE eId = NEW.eId LIMIT 1;
+  SELECT endDate INTO end_event FROM JudoEvents WHERE eId = NEW.eId LIMIT 1;
+  
+  IF (NEW.mDate NOT BETWEEN start_event AND end_event) THEN
+    SIGNAL SQLSTATE '45000' 
+    SET MESSAGE_TEXT = 'Match date is incorrect. Please ensure the date is within the event range.';
+  END IF;
+END//
+
+CREATE TRIGGER Check_date_upd BEFORE UPDATE ON JudoMatch
+FOR EACH ROW
+BEGIN
+  DECLARE start_event DATE;
+  DECLARE end_event DATE;
+  
+  SELECT startDate INTO start_event FROM JudoEvents WHERE eId = NEW.eId LIMIT 1;
+  SELECT endDate INTO end_event FROM JudoEvents WHERE eId = NEW.eId LIMIT 1;
+  
+  IF (NEW.mDate NOT BETWEEN start_event AND end_event) THEN
+    SIGNAL SQLSTATE '45000' 
+    SET MESSAGE_TEXT = 'Match date is incorrect. Please ensure the date is within the event range.';
+  END IF;
+END//
+
+CREATE TRIGGER check_teach BEFORE INSERT ON TeachIn
+FOR EACH ROW
+BEGIN
+  DECLARE belt_check ENUM("white","yellow","orange","green", "blue","brown", "black");
+  SELECT J.belt into belt_check FROM Judoka J where J.jId = NEW.jId;
+
+  IF  belt_check <> "black" THEN 
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This Judoka cannot be inert into the teachers, since they don't have a black belt";
+  END IF;
+END//
+
+
+CREATE TRIGGER check_teach_upd BEFORE UPDATE ON TeachIn
+FOR EACH ROW
+BEGIN
+  DECLARE belt_check ENUM("white","yellow","orange","green", "blue","brown", "black");
+  SELECT J.belt into belt_check FROM Judoka J where J.jId = NEW.jId;
+
+  IF  belt_check <> "black" THEN 
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This Judoka cannot be inert into the teachers, since they don't have a black belt";
+  END IF;
+END//
+
+CREATE TRIGGER check_correctness BEFORE INSERT ON PlayedScore
+FOR EACH ROW
+BEGIN
+  IF NEW.kScore IS NOT NULL  AND (NEW.ippon IS NOT NULL OR NEW.wazari IS NOT NULL OR NEW.yuko IS NOT NULL) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "ERROR: Score format is incorrect try checking if the score is a kata or 1v1 and if the attributes are according";
+  END IF;
+
+  IF NEW.kScore IS NULL  AND NEW.ippon IS NULL AND NEW.wazari IS NULL AND NEW.yuko IS NULL THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "ERROR: Score format is incorrect try checking if the score is a kata or 1v1 and if the attributes are according";
+  END IF;
+END//
+
+CREATE TRIGGER check_correctness_upd BEFORE UPDATE ON PlayedScore
+FOR EACH ROW
+BEGIN
+  IF NEW.kScore IS NOT NULL  AND (NEW.ippon IS NOT NULL OR NEW.wazari IS NOT NULL OR NEW.yuko IS NOT NULL) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "ERROR: Score format is incorrect try checking if the score is a kata or 1v1 and if the attributes are according";
+  END IF;
+  IF NEW.kScore IS NULL  AND NEW.ippon IS NULL AND NEW.wazari IS NULL AND NEW.yuko IS NULL THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "ERROR: Score format is incorrect try checking if the score is a kata or 1v1 and if the attributes are according";
+  END IF;
+END //
+
+
+DELIMITER ;
+
 
 INSERT INTO Addresses (addId, street, city, postalCode, province, region, country) VALUES
   (1, 'Via Roma 42', 'Torino', '20121', 'Torino', 'Lombardia', 'Italy'),
@@ -163,19 +243,19 @@ INSERT INTO Association (ascId, ascName, email, phone, addId) VALUES
   (9, 'Verona Judo Center', 'info@veronajudo.it', '0452345678', 9),
   (10, 'Venezia Dojos', 'info@veneziadojos.it', '0413456789', 10);
 INSERT INTO Judoka (jId, jName, gender, birthday, jWeight, canTeach, belt, startDate, addId, accId, ascId) VALUES
-  (1, 'John Doe', 'Male', '1990-05-12', 81.2, FALSE, 'black', '2007-12-10', 1, 1, 2,),
-  (2, 'Michael Brown', 'Male', '2007-12-10', 90.0, FALSE, 'black', '2007-12-10', 3, 2, 2,),
-  (3, 'Daniel Harris', 'Male', '2005-06-24', 81.5, FALSE, 'blue', '2007-12-10', 3, 2, 2,),
-  (4, 'Emily Wilson', 'Female', '2000-03-07', 56.8, FALSE, 'blue', '2006-12-10', 4, 3, 2,),
-  (5, 'Emma Clark', 'Female', '2001-04-30', 58.7, FALSE, 'orange', '2008-12-10', 10, 4, 2,),
-  (6, 'Roberto Bianchi', 'Male', '1991-07-15', 85.3, TRUE, 'black', '2006-12-10', 9, 5, 2,),
-  (7, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2009-12-10', 8, 6, 2,),
-  (8, 'Sofia Romano', 'Female', '1994-09-22', 62.7, TRUE, 'black', '1999-12-10', 5, 7, 2,),
-  (9, 'Marco Rossi', 'Male', '1989-03-18', 92.1, TRUE, 'black', '1999-12-10', 7, 8, 2,),
-  (10, 'Sarah Davis', 'Female', '2002-09-15', 60.2, FALSE, 'yellow', '2005-12-10', 6, 9, 2,),
-  (11, 'Chris White', 'Male', '1985-02-28', 102.3, FALSE, 'white', '2004-12-10', 7, 10, 2,),
-  (12, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2005-12-10', 8, NULL, 1,),
-  (13, 'David Wilson', 'Male', '1993-07-19', 78.4, FALSE, 'green', '2004-12-10', 4, NULL, 1,),
+  (1, 'John Doe', 'Male', '1990-05-12', 81.2, FALSE, 'black', '2007-12-10', 1, 1, 2),
+  (2, 'Michael Brown', 'Male', '2007-12-10', 90.0, FALSE, 'black', '2007-12-10', 3, 2, 2),
+  (3, 'Daniel Harris', 'Male', '2005-06-24', 81.5, FALSE, 'blue', '2007-12-10', 3, 2, 2),
+  (4, 'Emily Wilson', 'Female', '2000-03-07', 56.8, FALSE, 'blue', '2006-12-10', 4, 3, 2),
+  (5, 'Emma Clark', 'Female', '2001-04-30', 58.7, FALSE, 'orange', '2008-12-10', 10, 4, 2),
+  (6, 'Roberto Bianchi', 'Male', '1991-07-15', 85.3, TRUE, 'black', '2006-12-10', 9, 5, 2),
+  (7, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2009-12-10', 8, 6, 2),
+  (8, 'Sofia Romano', 'Female', '1994-09-22', 62.7, TRUE, 'black', '1999-12-10', 5, 7, 2),
+  (9, 'Marco Rossi', 'Male', '1989-03-18', 92.1, TRUE, 'black', '1999-12-10', 7, 8, 2),
+  (10, 'Sarah Davis', 'Female', '2002-09-15', 60.2, FALSE, 'yellow', '2005-12-10', 6, 9, 2),
+  (11, 'Chris White', 'Male', '1985-02-28', 102.3, FALSE, 'white', '2004-12-10', 7, 10, 2),
+  (12, 'Olivia Martinez', 'Female', '1997-11-05', 66.0, FALSE, 'brown', '2005-12-10', 8, NULL, 1),
+  (13, 'David Wilson', 'Male', '1993-07-19', 78.4, FALSE, 'green', '2004-12-10', 4, NULL, 1),
   (14, 'Jane Smith', 'Female', '1995-08-21', 63.5, FALSE, 'brown', '2010-12-10', 2, NULL, 1);
 INSERT INTO JudoEvents (eId, eName, price, eType, startDate, endDate, addId, ascId) VALUES
   (1, 'Judo Grand Prix', 50.0, 'Competition', '2025-08-01', '2025-08-02', 1, 2),
@@ -280,3 +360,43 @@ INSERT INTO TeachIn (jId, dId, cAge, cLevel) VALUES
   (9, 8, "Elderly","Intermediate"),
   (9, 9, "Elderly","Advanced"),
   (9,10, "Kids","Advanced");
+
+
+DELIMITER //
+CREATE PROCEDURE yearly_subs(IN Start_date DATE, IN End_date DATE)
+BEGIN
+    SELECT * 
+    FROM Judoka
+    WHERE startDate BETWEEN Start_date AND End_date ;
+END //
+
+CREATE PROCEDURE check_winner(IN curr_id INT)
+BEGIN
+    SELECT PS.mId, ippon*10 + wazari*5 + yuko as Points, ippon, wazari, yuko, J.jName   
+    FROM PlayedScore PS, JudoMatch JM, Judoka J
+    WHERE PS.mId = curr_id AND PS.forfeit <> curr_id AND PS.mId = JM.mId AND J.jId = PS.jId 
+    ORDER BY Points DESC LIMIT 1;
+END //
+
+
+CREATE PROCEDURE versus()
+BEGIN
+    SELECT P1.mId, J1.jName as player1, J2.jName as player2
+    FROM PlayedScore P1, PlayedScore P2, Judoka J1, Judoka J2
+    WHERE J1.jId < J2.jId AND P1.jId < P2.jId AND P1.mId = P2.mId AND P1.jId = J1.jId AND P2.jId = J2.jId AND P1.kScore IS NULL;
+END//
+
+CREATE PROCEDURE maxProfitEvent()
+BEGIN
+    SELECT R.eId, COUNT(R.rStatus) * JE.price as gain, JE.eName
+    FROM Request R, JudoEvents JE
+    WHERE R.rStatus = 'approved' AND JE.eId = R.eId
+    GROUP BY R.eId, JE.eName
+    ORDER BY gain DESC
+    LIMIT 1;
+END //
+
+DELIMITER ;
+
+
+

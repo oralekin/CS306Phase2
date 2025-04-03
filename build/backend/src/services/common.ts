@@ -5,25 +5,26 @@ interface IdType {
 	max: number;
 }
 
-function errFunction(res: Response) {
+export function errFunction(res: Response) {
 	return (err: any) => {
 		console.log(err);
 		return res.status(400).json(err);
 	};
 }
 
-
+/*get the names of ids attributes and return the condition to get the specific element*/
 function getIds(req: Request, keys: string[]) {
 	const ids = Object.entries(req.params).filter((entry) =>
 		keys.includes(entry[0]) ? entry[1] : null
 	);
 	if (ids.length == 0) throw new Error("Error on keys");
-    //[[jid,1] [ mid,2]] => ["jid = 1", "mid = 2"] => "jid = 1 AND mid=2 "
+	//get the string for the condition to get the right elem by ids es [[jid,1] [ mid,2]] => ["jid = 1", "mid = 2"] => "jid = 1 AND mid=2 "
 	const whereQuery = ids.map((id) => `${id[0]} = ${id[1]}`).join(" AND ");
 
 	return { ids, whereQuery };
 }
 
+/*add '' if the value is a string*/
 function toSqlValue<T>(value: T) {
 	if (value == null) return "NULL";
 	var isStr = typeof value == "string";
@@ -40,7 +41,7 @@ export function restApi<T extends object>(tableName: string, keys: string[]) {
 	}
 
 	function get(req: Request, res: Response) {
-		const { ids, whereQuery } = getIds(req, keys);
+		const { whereQuery } = getIds(req, keys);
 		connection
 			.promise()
 			.query(`SELECT * FROM ${tableName} where ${whereQuery}`)
@@ -94,7 +95,7 @@ export function restApi<T extends object>(tableName: string, keys: string[]) {
 	}
 
 	function put(req: Request, res: Response) {
-		const {  whereQuery } = getIds(req, keys);
+		const { whereQuery } = getIds(req, keys);
 		const entity: Partial<T> = req.body;
 
 		const updateStr = Object.entries(entity)
@@ -133,7 +134,6 @@ export function apiRouter<T extends object>(
 	const router = Router();
 
 	const params = (keys as string[]).map((x) => `:${x}`).join("/");
-    
 
 	router.get("/", api.getAll);
 	router.get(`/${params}`, api.get);

@@ -7,23 +7,42 @@
 		<title>CS306_GROUP_2_HW2</title>
 		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 	</head>
-	<body class="flex w-screen h-screen items-center justify-center">
-		<div class="flex flex-col gap-20">
+	<body
+		class="flex flex-col w-screen h-screen items-center justify-start my-10 gap-10"
+		onload="getMatches()"
+	>
+		<div class="w-full text-center">
+			<div class="text-3xl font-bold flex items-center justify-center">
+				<div>CS306 Project Group</div>
+				<div class="text-5xl text-red-400 -rotate-45">22</div>
+			</div>
+			<div class="text-md text-gray-400 font-bold">
+				Daniele Venere, Edoardo Cecca, Ekin Oral
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-10">
+			<div class="text-xl font-bold w-full text-center">Procedures</div>
 			<div class="flex gap-20 justify-between items-center">
 				<form class="flex flex-col">
 					<label for="year">Year</label>
 					<input
+						id="year"
 						type="text"
 						id="year"
 						name="year"
 						class="border-2 border-gray-200 rounded-lg"
+						onchange="enableButton(0)"
 					/>
 					<p class="text-gray-400 text-xs -margin-t-10">
 						return all judokas who subscribed in the selected year
 					</p>
 				</form>
 				<button
-					class="h-fit border-2 border-gray-300 px-2 rounded-lg hover:bg-indigo-500 bg-indigo-600 text-white cursor-pointer active:scale-95"
+					id="procedure1"
+					disabled
+					onclick="procedure(0)"
+					class="disabled:cursor-not-allowed disabled:active:scale-100 disabled:opacity-50 h-fit border-2 border-gray-300 px-2 rounded-lg hover:bg-indigo-500 bg-indigo-600 text-white cursor-pointer active:scale-95"
 				>
 					START PROCEDURE
 				</button>
@@ -31,19 +50,29 @@
 
 			<div class="flex gap-20 justify-between items-center">
 				<form class="flex flex-col">
-					<label for="tId">Match id </label>
-					<input
+					<label for="match">Match id</label>
+					<!-- <input
+						onchange=""
 						type="text"
-						id="tId"
-						name="tId"
+						id="match"
+						name="match"
 						class="border-2 border-gray-200 rounded-lg"
-					/>
+						onchange="enableButton(1)"
+					/> -->
+					<select
+						name="match"
+						id="match"
+						class="border-2 border-gray-200 rounded-lg"
+						onchange="enableButton(1)"
+					></select>
 					<p class="text-gray-400 text-xs -margin-t-10">
 						Check who won the match
 					</p>
 				</form>
 				<button
-					class="h-fit border-2 border-gray-300 px-2 rounded-lg hover:bg-indigo-500 bg-indigo-600 text-white cursor-pointer active:scale-95"
+					id="procedure2"
+					onclick="procedure(1)"
+					class="disabled:cursor-not-allowed disabled:active:scale-100 disabled:opacity-50 h-fit border-2 border-gray-300 px-2 rounded-lg hover:bg-indigo-500 bg-indigo-600 text-white cursor-pointer active:scale-95"
 				>
 					START PROCEDURE
 				</button>
@@ -57,11 +86,67 @@
 					</p>
 				</div>
 				<button
+					onclick="procedure(2)"
 					class="h-fit border-2 border-gray-300 px-2 rounded-lg hover:bg-indigo-500 bg-indigo-600 text-white cursor-pointer active:scale-95"
 				>
 					START PROCEDURE
 				</button>
 			</div>
+			<div class="flex flex-col items-center justify-center">
+				<div class="text-xl font-bold">Results</div>
+				<div class="text-xs text-gray-400" id="count"></div>
+				<div id="result" class="flex flex-col items-center"></div>
+			</div>
 		</div>
 	</body>
+	<script>
+		function enableButton(num) {
+			const procedureName = ["procedure1", "procedure2"];
+			if (num >= 0 && num < procedureName.length) {
+				const procedure = document.getElementById(procedureName[num]);
+				if (procedure) {
+					procedure.disabled = false;
+				}
+			}
+		}
+
+		async function getMatches() {
+			const elem = document.getElementById("match");
+
+			const data = await fetch("http://localhost:3000/match/all/vs").then(
+				(res) => res.json()
+			);
+
+			data.map((x) => {
+				const option = document.createElement("option");
+				option.value = x.mId;
+				option.innerHTML = `${x.player1} vs ${x.player2}`;
+				elem.append(option);
+			});
+		}
+		async function procedure(num) {
+			const ids = ["year", "match"];
+			const elem = document.getElementById(ids[num]);
+
+			const urls = [
+				`http://localhost:3000/judoka/subscription/${elem?.value}`,
+				`http://localhost:3000/match/winner/${elem?.value}`,
+				`http://localhost:3000/event/max/profit`,
+			];
+			console.log(urls[num - 1]);
+			const func = [
+				(x, i) => `${i + 1}.(${x.jName}, ${x.startDate.slice(0, 10)})`,
+				(x, i) =>
+					`${i + 1}.(${x.jName}, ${x.ippon}-${x.wazari}-${x.yuko})`,
+				(x, i) => `${i + 1}.(${x.eName}, ${x.gain})`,
+			];
+			if (num == 2 || elem) {
+				const data = await fetch(urls[num]).then((res) => res.json());
+				const result = document.getElementById("result");
+				result.innerHTML = "";
+				const elemets = data.map(func[num]).join("</br>");
+				result.innerHTML = elemets != "" ? elemets : "No results";
+			}
+		}
+	</script>
 </html>

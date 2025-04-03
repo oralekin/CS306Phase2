@@ -13,7 +13,4 @@ interface Request {
 	rDate: string;
 }
 
-export const requestRouter = apiRouter<Request>("Request", [
-	"jId",
-	"eId",
-]);
+export const requestRouter = apiRouter<Request>("Request", ["jId", "eId"]);
