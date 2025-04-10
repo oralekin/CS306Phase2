@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import { connection } from "..";
-import { apiRouter, errFunction } from "./common";
+import { apiRouter, errFunction, logQuery } from "./common";
 import { Request, Response } from "express";
 
 interface JudoMatch {
@@ -14,11 +14,9 @@ export const matchRouter = apiRouter<JudoMatch>("JudoMatch", ["mId"]);
 
 matchRouter.get("/winner/:mId", (req: Request, res: Response) => {
 	const { mId } = req.params;
-	const query = `CALL check_winner(${mId});`;
-	//[[[list], ],[]]
 	connection
 		.promise()
-		.query(query)
+		.execute(logQuery(`CALL check_winner(?);`, [mId]), [mId])
 		.then((result) =>
 			res.status(200).json((result[0] as RowDataPacket[][])[0])
 		)
@@ -26,11 +24,9 @@ matchRouter.get("/winner/:mId", (req: Request, res: Response) => {
 });
 
 matchRouter.get("/all/vs", (req: Request, res: Response) => {
-	const query = `CALL versus();`;
-
 	connection
 		.promise()
-		.query(query)
+		.execute(logQuery(`CALL versus();`))
 		.then((result) =>
 			res.status(200).json((result[0] as RowDataPacket[][])[0])
 		)

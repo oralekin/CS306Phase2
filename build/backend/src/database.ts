@@ -18,9 +18,6 @@ export function connect() {
 	});
 
 	connection.connect((e) => {
-		if (e) {
-			throw new Error("Database connection error: " + e.message);
-		}
 		console.log("Connected to " + process.env.DB_NAME);
 	});
 

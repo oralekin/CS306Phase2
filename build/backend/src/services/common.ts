@@ -1,9 +1,6 @@
 import { Router, Request, Response } from "express";
 import { connection } from "..";
-
-interface IdType {
-	max: number;
-}
+import { escape, FieldPacket, QueryResult, RowDataPacket } from "mysql2";
 
 export function errFunction(res: Response) {
 	return (err: any) => {
@@ -13,112 +10,134 @@ export function errFunction(res: Response) {
 }
 
 /*get the names of ids attributes and return the condition to get the specific element*/
-function getIds(req: Request, keys: string[]) {
+function getIdsQuery(req: Request, keys: string[]) {
 	const ids = Object.entries(req.params).filter((entry) =>
 		keys.includes(entry[0]) ? entry[1] : null
 	);
 	if (ids.length == 0) throw new Error("Error on keys");
 	//get the string for the condition to get the right elem by ids es [[jid,1] [ mid,2]] => ["jid = 1", "mid = 2"] => "jid = 1 AND mid=2 "
-	const whereQuery = ids.map((id) => `${id[0]} = ${id[1]}`).join(" AND ");
+	const queryObj = ids.map((id) => {
+		return { query: `${id[0]} = ?`, value: id[1] };
+	});
 
-	return { ids, whereQuery };
+	return {
+		ids,
+		whereQuery: queryObj.map((x) => x.query).join(" AND "),
+		values: queryObj.map((x) => x.value),
+	};
 }
 
-/*add '' if the value is a string*/
-function toSqlValue<T>(value: T) {
-	if (value == null) return "NULL";
-	var isStr = typeof value == "string";
-	return !isStr ? value : `'${value}'`;
+export function logQuery(str: string, values: number[] | string[] = []) {
+	console.log(
+		`\t\t${str}\t` + (values.length ? `[${values.join(", ")}]` : "")
+	);
+	return str;
 }
 
 export function restApi<T extends object>(tableName: string, keys: string[]) {
 	function getAll(req: Request, res: Response) {
 		connection
 			.promise()
-			.query(`SELECT * FROM ${tableName}`)
+			.execute(logQuery(`SELECT * FROM ${tableName}`))
 			.then((result) => res.status(200).json(result[0]))
 			.catch(errFunction(res));
 	}
 
 	function get(req: Request, res: Response) {
-		const { whereQuery } = getIds(req, keys);
+		const { whereQuery, values } = getIdsQuery(req, keys);
+
 		connection
 			.promise()
-			.query(`SELECT * FROM ${tableName} where ${whereQuery}`)
+			.execute(
+				logQuery(
+					`SELECT * FROM ${tableName} WHERE ${whereQuery}`,
+					values
+				),
+				values
+			)
 			.then((result) => res.status(200).json(result[0]))
 			.catch(errFunction(res));
 	}
 
-	function post(req: Request, res: Response) {
+	async function post(req: Request, res: Response) {
 		const entity: T = req.body;
-		//return a string with all keys like "(jId, jName, canTeach ....)"
-		const headerStr = `(${Object.keys(entity)
-			.map((key) => `${key}`)
-			.join(", ")})`;
-
+		const bodyKeys = Object.keys(entity);
+		let values = Object.entries(entity).map((val) => val[1]);
+		console.log(keys.length);
 		if (keys.length == 1) {
-			connection
-				.promise()
-				.query(`SELECT max(${keys[0]}) as max FROM ${tableName}`)
-				.then((maxQuery) => {
-					const newId = (maxQuery[0] as IdType[])[0].max + 1;
-					const valuesStr = `(${Object.entries(entity)
-						.map((entry) =>
-							entry[0] == keys[0] ? newId : toSqlValue(entry[1])
-						)
-						.join(", ")})`;
-
-					connection
+			const maxId: any = (
+				(
+					await connection
 						.promise()
-						.query(
-							`INSERT INTO ${tableName} ${headerStr} VALUES
-                            ${valuesStr}`
+						.execute(
+							logQuery(
+								`SELECT max(${bodyKeys[0]}) as max FROM ${tableName};`
+							),
+							[bodyKeys[0]]
 						)
-						.then((result) => res.status(200).json(result[0]))
-						.catch(errFunction(res));
-				})
-				.catch(errFunction(res));
-		} else {
-			//SUPER KEY CASE
-			const valuesStr = `(${Object.entries(entity)
-				.map((val) => toSqlValue(val[1]))
-				.join(", ")})`;
-			connection
-				.promise()
-				.query(
-					`INSERT INTO ${tableName} ${headerStr} VALUES
-            ${valuesStr}`
-				)
-				.then((result) => res.status(200).json(result[0]))
-				.catch(errFunction(res));
+				)[0] as RowDataPacket[][]
+			)[0];
+			console.log(maxId);
+
+			const newId: number = (maxId.max as number) + 1;
+			values = Object.entries(entity).map((entry) =>
+				entry[0] == keys[0] ? newId : entry[1]
+			);
+			console.log(values);
 		}
-	}
-
-	function put(req: Request, res: Response) {
-		const { whereQuery } = getIds(req, keys);
-		const entity: Partial<T> = req.body;
-
-		const updateStr = Object.entries(entity)
-			.filter((entry) => !keys.includes(entry[0]))
-			.map((entry) => `${entry[0]} = ${toSqlValue(entry[1])}`)
-			.join(", ");
-
-		const query = `UPDATE ${process.env.DB_NAME}.${tableName}
-            SET ${updateStr}
-            WHERE ${whereQuery};`;
 
 		connection
 			.promise()
-			.query(query)
+			.query(
+				logQuery(
+					`INSERT INTO ${tableName} (${bodyKeys.map((x) =>
+						escape(x).replace(/'/g, "")
+					)}) VALUES (?);`,
+					values
+				),
+				[values]
+			)
+			.then((result) => res.status(200).json(result[0]))
+			.catch(errFunction(res));
+	}
+
+	function put(req: Request, res: Response) {
+		const { whereQuery, values: whereValues } = getIdsQuery(req, keys);
+		const entity: Partial<T> = req.body;
+		const filteredEntries = Object.entries(entity).filter(
+			(entry) => !keys.includes(entry[0])
+		);
+
+		const updateObj = filteredEntries.map(
+			(entry) => `${escape(entry[0]).replace(/'/g, "")} = ?`
+		);
+
+		const values: any[] = filteredEntries.map((x) => x[1]);
+
+		connection
+			.promise()
+			.execute(
+				logQuery(
+					`UPDATE ${tableName} SET ${updateObj} WHERE ${whereQuery};`,
+					values
+				),
+				values.concat(whereValues)
+			)
 			.then((result) => res.status(200).json("Success"))
 			.catch(errFunction(res));
 	}
 
 	function remove(req: Request, res: Response) {
-		const { whereQuery } = getIds(req, keys);
+		const { whereQuery, values } = getIdsQuery(req, keys);
 		connection
 			.promise()
-			.query(`DELETE FROM ${tableName} WHERE ${whereQuery};`)
+			.execute(
+				logQuery(
+					`DELETE FROM ${tableName} WHERE ${whereQuery};`,
+					values
+				),
+				values
+			)
 			.then((result) => res.status(200).json(result[0]))
 			.catch(errFunction(res));
 	}
