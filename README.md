@@ -77,10 +77,6 @@ This will be used to store Apache logs. The default value for this is `./docker/
 > For Apple Silicon Users:
 > Please select Mariadb as Database. Oracle doesn't build their SQL Containers for the arm Architecture
 
-_**DATABASE**_
-
-Define which MySQL or MariaDB Version you would like to use.
-
 _**MYSQL_INITDB_DIR**_
 
 When a container is started for the first time files in this directory with the extensions `.sh`, `.sql`, `.sql.gz` and
