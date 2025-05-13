@@ -77,10 +77,10 @@ This will be used to store Apache logs. The default value for this is `./docker/
 > For Apple Silicon Users:
 > Please select Mariadb as Database. Oracle doesn't build their SQL Containers for the arm Architecture
 
-_**MYSQL_INITDB_DIR**_
+_**MYSQL_INITDB_SCRIPT**_
 
-When a container is started for the first time files in this directory with the extensions `.sh`, `.sql`, `.sql.gz` and
-`.sql.xz` will be executed in alphabetical order. `.sh` files without file execute permission are sourced rather than executed.
+When a container is started for the first time this script file with the extensions `.sh`, `.sql`, `.sql.gz` or
+`.sql.xz` will be executed. `.sh` file without file execute permission are sourced rather than executed.
 The default value for this is `./docker/config/initdb`.
 
 _**MYSQL_DATA_DIR**_
