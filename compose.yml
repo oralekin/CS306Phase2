@@ -28,8 +28,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   database:
-    build:
-      context: "./docker/bin/mysql"
+    image: mariadb:latest
     container_name: "${COMPOSE_PROJECT_NAME}-mysql"
     restart: "always"
     ports:
