@@ -45,6 +45,7 @@
                                     mysqli_close($link);
                                     ?>
                                 </li>
+                                <li>MongoDB <?= extension_loaded("mongodb") ? "loaded" : "not loaded" ; ?></li>
                             </ul>
                         </div>
                     </div>
