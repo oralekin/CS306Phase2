@@ -4,7 +4,7 @@
 // Connect to MongoDB
 try {
     // Create MongoDB client
-    $manager = new MongoDB\Driver\Manager("mongodb://" . $_ENV['MONGO_ROOT_USERNAME']. ":" . $_ENV['MONGO_ROOT_PASSWORD']."@mongodb:27017");
+    $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
     
     // Create a document to insert
     $document = [

@@ -45,7 +45,24 @@
                                     mysqli_close($link);
                                     ?>
                                 </li>
-                                <li>MongoDB <?= extension_loaded("mongodb") ? "loaded" : "not loaded" ; ?></li>
+                                <li>
+                                    <?php
+                                    if (!extension_loaded("mongodb")) {
+                                        print("MongoDB extension not loaded.");
+                                    } else {
+                                        $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
+                                        $command = new MongoDB\Driver\Command(['buildInfo' => 1]);
+                                        try {
+                                            $cursor = $manager->executeCommand('admin', $command);
+                                            $res = $cursor->toArray()[0];
+                                            printf("MongoDB Server %s", $res->version);
+                                            // $cursor.getServer().getServerDescription().getType()
+                                        } catch(MongoDB\Driver\Exception $e) {
+                                            printf("MongoDB connection failed: %s\n", $e->getMessage());
+                                        }
+                                    }
+                                    ?>
+                                </li>
                             </ul>
                         </div>
                     </div>
