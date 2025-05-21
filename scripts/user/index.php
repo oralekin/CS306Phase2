@@ -10,23 +10,23 @@
 </head>
 
 <body>
-    <div class="flex flex-col gap-4 justify-center items-center h-screen">
+    <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
         <h1 class="font-bold text-4xl">Navigation</h1>
         <h1 class="font-bold text-2xl ">Triggers</h1>
         <div class="border-2 border-black rounded-xl px-15 py-10 flex  gap-5">
 
-            <a href="/triggers/trigger1.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/triggers/trigger_1.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Trigger 1</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 
             </a>
-            <a href="/triggers/trigger2.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/triggers/trigger_2.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Trigger 2</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 
 
             </a>
-            <a href="/triggers/trigger3.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/triggers/trigger_3.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Trigger 3</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 
@@ -38,17 +38,17 @@
         <h1 class="font-bold text-2xl ">Procedures</h1>
         <div class="border-2 border-black rounded-xl px-15 py-10 flex  gap-5">
 
-            <a href="/procedures/procedure1.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/procedures/procedure_1.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Procedure 1</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 
             </a>
-            <a href="/procedures/procedure2.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/procedures/procedure_2.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Procedure 2</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 
             </a>
-            <a href="/procedures/procedure3.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
+            <a href="/procedures/procedure_3.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Procedure 3</div>
                 <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
 

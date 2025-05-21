@@ -1,41 +1,25 @@
-<?php
-$con = mysqli_connect("localhost","my_user","my_password","my_db");
-
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  exit();
-}
-
-// Perform query
-if ($result = mysqli_query($con, "SELECT * FROM Persons")) {
-  echo "Returned rows are: " . mysqli_num_rows($result);
-  // Free result set
-  mysqli_free_result($result);
-}
-
-mysqli_close($con);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procedure 1</title>
+    <title>Trigger 3</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
 </head>
 
 <body>
-    <div class="flex flex-col gap-4 justify-center items-center h-screen">
+    <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
         <a href="/user" class="text-gray-400 text-sm hover:text-gray-500">Back</a>
-        <h1 class="font-bold text-4xl">Procedure 1</h1>
+        <h1 class="font-bold text-4xl">Trigger 3</h1>
         <div class="font-bold text-md text-gray-400">By Thorfinn Thorsson</div>
-        <p class="max-w-xl text-sm">This stored procedure takes in two date parameters and returns the judokas that started
-            between these dates.
-            Before insert operation After insert operation
-        </p>
+        <p class="max-w-xl text-sm">According to our ER model, each judoka in a match has one match score entity related to
+            them. A match score can either be a 1v1 score or a kata score, represented by an is-a relationship
+            in our ER model. We chose to translate the match score entity as a single relation PlayedScore
+            having attributes representing both 1v1 and kata score, and requiring that one and only one of the
+            types of attributes may be set on an instance. Before a row is inserted into PlayedScore, these
+            triggers will ensure that this constraint is satisfied and reject the operation if not.</p>
         <button class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Trigger</button>
         <div class="flex pt-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
