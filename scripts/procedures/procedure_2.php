@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
         <a href="/user" class="text-indigo-400 text-sm hover:text-gray-500 underline ">Back</a>
-        <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Procedure <div class="text-5xl text-red-400 -rotate-45">2</div>
+        <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Procedure <div class="text-5xl text-red-400 rotate-45">2</div>
         </h1>
         <div class="font-bold text-md text-gray-400">By Thorfinn Thorsson</div>
         <p class="max-w-xl text-sm">This stored procedure takes in one integer parameter, a match id, and returns the match id,

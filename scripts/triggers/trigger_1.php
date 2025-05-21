@@ -27,7 +27,7 @@ $insideQuery = "INSERT INTO JudoMatch (mTime, mDate, eId) VALUES (3.42, '2025-08
 <body>
     <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
         <a href="/user" class="text-indigo-400 text-sm hover:text-gray-500 underline ">Back</a>
-        <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Trigger <div class="text-5xl text-red-400 -rotate-45">1</div>
+        <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Trigger <div class="text-5xl text-red-400 rotate-45">1</div>
         </h1>
         <div class="font-bold text-md text-gray-400">By Daniele Venere</div>
         <p class="max-w-xl text-sm">When judo matches are inserted into JudoMatch, they must be associated with a judo
