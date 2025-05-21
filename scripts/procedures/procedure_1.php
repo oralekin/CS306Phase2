@@ -23,8 +23,9 @@ if (mysqli_connect_errno()) {
 
 <body>
     <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
-        <a href="/user" class="text-gray-400 text-sm hover:text-gray-500">Back</a>
-        <h1 class="font-bold text-4xl">Procedure 1</h1>
+        <a href="/user" class="text-indigo-400 text-sm hover:text-gray-500 underline ">Back</a>
+        <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Procedure <div class="text-5xl text-red-400 rotate-45">1</div>
+        </h1>
         <div class="font-bold text-md text-gray-400">By Daniele Venere</div>
         <p class="max-w-xl text-sm">This stored procedure takes in one parameters called year, and returns all the judokas that started
             in that year.
@@ -38,7 +39,7 @@ if (mysqli_connect_errno()) {
         </form>
         <div class="flex pt-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
-            <div class="max-w-4xl">
+            <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10">
                 <?
                 if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
                     $query = "CALL yearly_subs('" . $_POST["start"] . "-01-01','" . $_POST["start"] + 1 . "-01-01');";
