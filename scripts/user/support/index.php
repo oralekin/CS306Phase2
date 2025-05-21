@@ -27,7 +27,7 @@
             <option value="" />
         <?php }
         foreach ($usernames as $username) { ?>
-            <option value="<?= $username ?>"<?= ($_GET["username"] == $username) ? " selected" : "" ?>><?= $username ?></option>
+            <option value="<?= $username ?>"<?= (($_GET["username"] ?? "false") == $username) ? " selected" : "" ?>><?= $username ?></option>
             <?php }
     ?>
     </select>
@@ -38,7 +38,7 @@
   <div style="border: 1px solid black; padding: 10px; margin: 10px;">
         <h2>Results:</h2>
         <?php
-        if ($_GET['username']) {
+        if (isset($_GET['username'])) {
             $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
             $results = $manager->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query(['username' => $_GET['username']]));
             if (isset($results)) {
