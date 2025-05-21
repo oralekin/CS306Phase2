@@ -1,15 +1,3 @@
-<?php
-
-$con = mysqli_connect(getenv('MYSQL_URL'), "root", getenv('MYSQL_ROOT_PASSWORD'), getenv("MYSQL_DATABASE"));
-
-if (mysqli_connect_errno()) {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    exit();
-}
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,6 +29,12 @@ if (mysqli_connect_errno()) {
             <div class="font-bold text-2xl">Results</div>
             <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10">
                 <?
+                $con = mysqli_connect(getenv('MYSQL_URL'), "root", getenv('MYSQL_ROOT_PASSWORD'), getenv("MYSQL_DATABASE"));
+
+                if (mysqli_connect_errno()) {
+                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                    exit();
+                }
                 if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
                     $query = "CALL yearly_subs('" . $_POST["start"] . "-01-01','" . $_POST["start"] + 1 . "-01-01');";
 
@@ -55,6 +49,7 @@ if (mysqli_connect_errno()) {
                 } else {
                     echo  "Insert a year!";
                 }
+                $con->close()
 
                 ?>
             </div>

@@ -1,22 +1,23 @@
-<!--
-PHP SCRIPT HERE!!!
-DEFINE "results" variable to be able to use it in the html script.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>User Ticket List</title>
 </head>
 
 <body>
-    <!-- get the results from the php script and put them into seperate outlined boxes  -->
+
+    <a href="/user">Home</a>
+    <a href="./createTicket.php">Create a Ticket</a>
+
     <div style="border: 1px solid black; padding: 10px; margin: 10px;">
         <h2>Results:</h2>
         <?php
+
+        $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
+        $results = $manager->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query([]));
         if (isset($results)) {
             foreach ($results as $document) {
                 echo "<div style='border: 1px solid blue; padding: 10px; margin: 5px;'>";
@@ -32,10 +33,9 @@ DEFINE "results" variable to be able to use it in the html script.
                 echo "<strong>Username: </strong>{$document->username}<br>";
                 echo "</div>";
             }
-        } else {
-            echo "No results found!<br>";
         }
         ?>
+
     </div>
 
 </body>
