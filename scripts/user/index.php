@@ -40,7 +40,7 @@
 
             <a href="/procedures/procedure_1.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                 <div class="font-bold">Procedure 1</div>
-                <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
+                <div class="font-bold text-sm text-gray-400">By Daniele Venere</div>
 
             </a>
             <a href="/procedures/procedure_2.php" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">

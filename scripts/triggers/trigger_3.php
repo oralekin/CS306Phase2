@@ -20,7 +20,9 @@
             having attributes representing both 1v1 and kata score, and requiring that one and only one of the
             types of attributes may be set on an instance. Before a row is inserted into PlayedScore, these
             triggers will ensure that this constraint is satisfied and reject the operation if not.</p>
-        <button class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Trigger</button>
+        <form method="post" class="flex gap-2 items-end ">
+            <button value="fire" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Trigger</button>
+        </form>
         <div class="flex pt-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
             <div class="max-w-4xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dolores commodi ipsum excepturi voluptatibus quibusdam harum eligendi, obcaecati repudiandae id alias pariatur ex, molestias quae maxime corrupti explicabo, aliquid tempora?</div>

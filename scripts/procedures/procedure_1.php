@@ -1,10 +1,12 @@
 <?php
+
 $con = mysqli_connect(getenv('MYSQL_URL'), "root", getenv('MYSQL_ROOT_PASSWORD'), getenv("MYSQL_DATABASE"));
 
 if (mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
 }
+
 
 ?>
 
@@ -23,7 +25,7 @@ if (mysqli_connect_errno()) {
     <div class="flex flex-col gap-4 justify-center items-center min-h-screen">
         <a href="/user" class="text-gray-400 text-sm hover:text-gray-500">Back</a>
         <h1 class="font-bold text-4xl">Procedure 1</h1>
-        <div class="font-bold text-md text-gray-400">By Thorfinn Thorsson</div>
+        <div class="font-bold text-md text-gray-400">By Daniele Venere</div>
         <p class="max-w-xl text-sm">This stored procedure takes in one parameters called year, and returns all the judokas that started
             in that year.
             Before insert operation After insert operation
@@ -40,7 +42,7 @@ if (mysqli_connect_errno()) {
                 <?
                 if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
                     $query = "CALL yearly_subs('" . $_POST["start"] . "-01-01','" . $_POST["start"] + 1 . "-01-01');";
-                   
+
                     if ($result = mysqli_query($con, $query)) {
                         if (mysqli_num_rows($result) > 0) {
                             for ($i = 0; $i < $result->num_rows; $i++) {

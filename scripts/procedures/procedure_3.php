@@ -17,7 +17,12 @@
         <p class="max-w-xl text-sm">This stored procedure returns the id, gross income, and name of judo event in the database
             that made the most gross income from participant entry fees. The gross income is found by
             multiplying the fee for the event with the number of approved requests to participate in the event.</p>
-        <button class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Trigger</button>
+        <form method="post" class="flex gap-2 items-end ">
+            <div class="flex flex-col"><label for="start">Year</label><input value="" name="start" class="bg-white border-2 border-gray-300 min-w-50 rounded-xl" /></div>
+
+
+            <button value="fire" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Trigger</button>
+        </form>
         <div class="flex pt-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
             <div class="max-w-4xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dolores commodi ipsum excepturi voluptatibus quibusdam harum eligendi, obcaecati repudiandae id alias pariatur ex, molestias quae maxime corrupti explicabo, aliquid tempora?</div>
