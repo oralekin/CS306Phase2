@@ -14,7 +14,7 @@ $bulk = new MongoDB\Driver\BulkWrite();
 if (!empty($_POST)) {
   $bulk->insert([
     'username'=> $_POST['username'],  
-    'message'=> $_POST['body'],
+    'body'=> $_POST['body'],
     'created_at' => date("c"),
     'status'=> TRUE,
     'comments'=> [],
