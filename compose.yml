@@ -26,6 +26,10 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_URL: database
       HOST_MACHINE_MYSQL_PORT: ${HOST_MACHINE_MYSQL_PORT}
+      MONGO_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-root}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-root}
+      MONGO_DATABASE: ${MONGO_DATABASE-app}
+      MONGO_URL: ${MONGO_URL-mongodb}
     extra_hosts:
       - "host.docker.internal:host-gateway"
   database:
