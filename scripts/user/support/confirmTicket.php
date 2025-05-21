@@ -7,7 +7,7 @@
 </head>
 <body>
 <a href="./createTicket.php">Create another ticket</a><br />
-<a href="..">Ticket list</a>
+<a href=".">Ticket list</a>
 <?php
 $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
 $bulk = new MongoDB\Driver\BulkWrite();
