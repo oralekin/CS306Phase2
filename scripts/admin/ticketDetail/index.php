@@ -104,7 +104,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
       $found = true;
     }
 
-    ?>
+?>
 
     <!DOCTYPE html>
     <html lang="en">
@@ -121,11 +121,11 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         <button type="submit" name="action" value="deactivate">Deactivate ticket</button>
       </form>
       <?php if (isset($deactivate_error)) {
-        ?>
+      ?>
         <div style="border: 1px solid red; padding: 3px; margin: 3px;">
           <?= $deactivate_error ?>
         </div>
-        <?php
+      <?php
       } ?>
 
       <h2>Ticket Details</h2>
@@ -144,22 +144,22 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         <?php } ?>
       </div>
       <form method="post">
-        <textarea name="comment" placeholder="Add a comment"><?= $comment_body ?></textarea><br>
-        <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
+        <textarea name="comment" placeholder="Add a comment"><?= $comment_body ?? "" ?></textarea><br>
+        <input type="hidden" name="id" value="<?= $_GET['id']  ?? "" ?>">
         <button type="submit" name="action" value="comment">Add comment</button><br>
       </form>
       <?php if (isset($comment_error)) {
-        ?>
+      ?>
         <div style="border: 1px solid red; padding: 3px; margin: 3px;">
           <?= $comment_error ?>
         </div>
-        <?php
+      <?php
       } ?>
       <a href="..">Back to Tickets</a>
     </body>
 
     </html>
-    <?php
+<?php
     break;
   default:
     http_response_code(400);

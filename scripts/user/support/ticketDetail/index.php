@@ -69,7 +69,7 @@ if (isset($_GET['id'])) {
     $found = true;
   }
 
-  ?>
+?>
 
   <!DOCTYPE html>
   <html lang="en">
@@ -97,17 +97,17 @@ if (isset($_GET['id'])) {
       <?php } ?>
     </div>
     <form method="post">
-      <textarea name="comment" placeholder="Add a comment"><?= $comment_body ?></textarea><br>
-      <input type="text" name="username" placeholder="Your username" value="<?= $username ?>"><br>
+      <textarea name="comment" placeholder="Add a comment"><?= $comment_body ?? "" ?></textarea><br>
+      <input type="text" name="username" placeholder="Your username" value="<?= $username ?? "" ?>"><br>
       <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
       <button type="submit">Add comment</button><br>
     </form>
     <?php if (isset($add_error)) {
-      ?>
+    ?>
       <div style="border: 1px solid red; padding: 3px; margin: 3px;">
         <?= $add_error ?>
       </div>
-      <?php
+    <?php
     } ?>
     <a href="/user/support">Back to Tickets</a>
   </body>
