@@ -38,7 +38,7 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
     </select>
     <button type="submit">Select</button>
   </form>
-  <a href="./createTicket.php">Create a Ticket</a>
+  <a href="./createTicket">Create a Ticket</a>
 
   <div style="border: 1px solid black; padding: 10px; margin: 10px;">
     <h2>Results:</h2>
@@ -52,7 +52,7 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
           <strong>Body: </strong><?= $document->body ?><br>
           <strong>Created At: </strong><?= $document->created_at ?><br>
           <strong>Username: </strong><?= $document->username ?><br>
-          <a href="ticketDetail.php?id=<?= $document->_id ?>">View Details</a><br>
+          <a href="ticketDetail?id=<?= $document->_id ?>">View Details</a><br>
         </div>
         <?php
       }
