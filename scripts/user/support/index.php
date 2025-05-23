@@ -23,7 +23,7 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
         ->toArray()[0]
         ->values;
       ?>
-      <option <?= !empty($_GET["username"]) ? "" : " selected" ?> />
+      <option <?= !empty($_GET["username"]) ? "" : " selected" ?>></option>
       <?php
 
       if (count($usernames) == 0) { ?>
