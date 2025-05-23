@@ -1,4 +1,40 @@
 <?php
+
+/*
+if this is a POST, we are adding a comment.
+on successful comment addition, redireect user to ticket detail for this thicket
+on failure, RENDER ticket detail with error message.
+*/
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // comment being added.
+  $id = $_POST["id"];
+  $username = $_POST["username"];
+  $comment_body = $_POST["comment"];
+
+  if (empty($id))
+    $add_error .= "Something went wrong!\n";
+
+  if (empty($username))
+    $add_error .= "Username is required.\n";
+
+  if (empty($comment_body))
+    $add_error .= "Comment body is required.\n";
+
+  // TODO: push comment to mongodb
+
+
+  $success = empty($add_error);
+
+  // if coment add successful, redirect user to GET detail of this ticket
+  if ($success) {
+    http_response_code(303); // "See Other" = redirect after POST.
+    header("Location: {$_SERVER['PHP_SELF']}?id=$id");
+    die();
+  }
+}
+
+
 if (isset($_GET['id'])) {
 
   $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
@@ -12,6 +48,7 @@ if (isset($_GET['id'])) {
     $ticket = $ticket_temp;
     $found = true;
   }
+
   ?>
 
   <!DOCTYPE html>
@@ -39,6 +76,19 @@ if (isset($_GET['id'])) {
         </div>
       <?php } ?>
     </div>
+    <form method="post">
+      <textarea name="comment" placeholder="Add a comment"><?= $comment_body ?></textarea><br>
+      <input type="text" name="username" placeholder="Your username" value="<?= $username ?>"><br>
+      <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
+      <button type="submit">Add comment</button><br>
+    </form>
+    <?php if (isset($add_error)) {
+      ?>
+      <div style="border: 1px solid red; padding: 3px; margin: 3px;">
+        <?= $add_error ?>
+      </div>
+      <?php
+    } ?>
     <a href="/user/support">Back to Tickets</a>
   </body>
 
