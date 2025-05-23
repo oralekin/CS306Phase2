@@ -6,6 +6,8 @@ on successful comment addition, redireect user to ticket detail for this thicket
 on failure, RENDER ticket detail with error message.
 */
 
+$mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // comment being added.
   $id = $_POST["id"];
@@ -21,10 +23,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($comment_body))
     $add_error .= "Comment body is required.\n";
 
-  // TODO: push comment to mongodb
-
-
   $success = empty($add_error);
+
+  if ($success) {
+    $bulk = new MongoDB\Driver\BulkWrite();
+    $bulk->update(['_id' => new \MongoDB\BSON\ObjectId($_GET['id'])], [
+      '$push' => [
+        'comments' => [
+          'username' => $username,
+          'comment' => $comment_body,
+          'created_at' => date("c"),
+        ]
+      ]
+    ]);
+    $r = $mongo->executeBulkWrite(getenv("MONGO_DATABASE") . ".tickets", $bulk);
+    if ($r->getModifiedCount() == 0) {
+      $add_error .= "Failed to add comment.\n";
+      $success = false;
+    }
+    if ($r->getModifiedCount() > 1) {
+      $add_error .= "Something went wrong!\n";
+      $success = false;
+    }
+  }
+
 
   // if coment add successful, redirect user to GET detail of this ticket
   if ($success) {
@@ -36,9 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 if (isset($_GET['id'])) {
-
-  $manager = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME") . ":" . getenv("MONGO_ROOT_PASSWORD") . "@" . getenv("MONGO_URL") . ":27017");
-  $results = $manager->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query(['_id' => new \MongoDB\BSON\ObjectId($_GET['id'])]));
+  $results = $mongo->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query(['_id' => new \MongoDB\BSON\ObjectId($_GET['id'])]));
   $found = false;
   foreach ($results as $ticket_temp) {
     if ($found) {
