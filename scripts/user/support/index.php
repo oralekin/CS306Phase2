@@ -54,6 +54,7 @@
                     echo "<strong>Body: </strong>{$document->body}<br>";
                     echo "<strong>Created At: </strong>{$document->created_at}<br>";
                     echo "<strong>Username: </strong>{$document->username}<br>";
+                    echo "<a href=\"ticketDetail.php?id={$document->_id}\">View Details</a><br>";
                     echo "</div>";
                 }
             } else {
