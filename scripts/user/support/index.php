@@ -18,6 +18,9 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
       $distinct = new MongoDB\Driver\Command([
         'distinct' => 'tickets',
         'key' => 'username',
+        'query' => [
+          'status' => true,
+        ]
       ]);
       $usernames = $mongo->executeReadCommand(getenv("MONGO_DATABASE"), $distinct)
         ->toArray()[0]
@@ -31,7 +34,9 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
         <option value=""> </option>
       <?php }
       foreach ($usernames as $username) { ?>
-        <option value="<?= $username ?>" <?= (($_GET["username"] ?? NULL) == trim($username)) ? " selected" : "" ?>><?= $username ?></option>
+        <option value="<?= $username ?>" <?= (($_GET["username"] ?? NULL) == trim($username)) ? " selected" : "" ?>>
+          <?= $username ?>
+        </option>
       <?php }
       ?>
     </select>
@@ -43,7 +48,10 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
     <h2>Results:</h2>
     <?php
     if (!empty($_GET['username'])) {
-      $results = $mongo->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query(['username' => $_GET['username']]));
+      $results = $mongo->executeQuery(getenv("MONGO_DATABASE") . '.tickets', new MongoDB\Driver\Query([
+        'username' => $_GET['username'],
+        'status' => true,
+      ]));
       foreach ($results as $document) {
         ?>
         <div style='border: 1px solid blue; padding: 10px; margin: 5px;'>
