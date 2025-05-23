@@ -72,7 +72,7 @@ if (isset($_GET['id'])) {
         <div style='border: 1px solid blue; padding: 10px; margin: 5px;'>
           <strong>Created At: </strong><?= $comment->created_at ?><br>
           <strong>Username: </strong><?= $comment->username ?><br>
-          <strong>Body: </strong><?= $comment->body ?><br>
+          <strong>Comment: </strong><?= $comment->comment ?><br>
         </div>
       <?php } ?>
     </div>
