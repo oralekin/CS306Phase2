@@ -68,8 +68,9 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
     }
 
     ?>
-
   </div>
+
+  <a href="/user">Home</a><br>
 
 </body>
 
