@@ -22,7 +22,6 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
       $usernames = $mongo->executeReadCommand(getenv("MONGO_DATABASE"), $distinct)
         ->toArray()[0]
         ->values;
-      var_dump(($username));
       ?>
       <option <?= !empty($_GET["username"]) ? "" : " selected" ?> />
       <?php
@@ -48,7 +47,7 @@ $mongo = new MongoDB\Driver\Manager("mongodb://" . getenv("MONGO_ROOT_USERNAME")
       foreach ($results as $document) {
         ?>
         <div style='border: 1px solid blue; padding: 10px; margin: 5px;'>
-          <strong>Status: </strong><?= $ticket->status ? "Active" : "Inactive" ?><br>
+          <strong>Status: </strong><?= $document->status ? "Active" : "Inactive" ?><br>
           <strong>Body: </strong><?= $document->body ?><br>
           <strong>Created At: </strong><?= $document->created_at ?><br>
           <strong>Username: </strong><?= $document->username ?><br>
