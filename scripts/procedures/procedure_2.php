@@ -50,23 +50,15 @@ if (mysqli_connect_errno()) {
         </form>
         <div class="flex pt-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
-<<<<<<< HEAD
 <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10">
             
                 <?
                 if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
-                    $query = "CALL yearly_subs('" . $_POST["start"] . "-01-01','" . $_POST["start"] + 1 . "-01-01');";
-
-                    if ($result = mysqli_query($con, $query)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            for ($i = 0; $i < $result->num_rows; $i++) {
-                                $row = $result->fetch_row();
-                                echo  $row[1] . "<br/>";
-                            }
-                        } else echo "No results";
-                    }
+                    $query = "CALL check_winner(" . $_POST["start"] . ");";
+                    $result = mysqli_query($con, $query);                     
+                    echo "Winner: " . $result->fetch_row()[5];
                 } else {
-                    echo  "Insert a year!";
+                    echo  "Select a match!";
                 }
 
                 ?>
