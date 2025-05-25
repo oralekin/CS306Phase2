@@ -59,6 +59,7 @@ $insideQuery = "INSERT INTO JudoMatch (mTime, mDate, eId) VALUES (3.42, '2025-08
                                                                                             echo "Element inserted";
                                                                                         }
                                                                                     }
+                                                                                    $con->close()
                                                                                     ?></div>
         </div>
     </div>
