@@ -48,7 +48,7 @@ $insideQuery = "INSERT INTO JudoMatch (mTime, mDate, eId) VALUES (3.42, '2025-08
             <button value="outside" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Outside the date</button>
             <button value="inside" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Inside the date</button>
         </form>
-        <div class="flex pt-20 flex-col items-center gap-4">
+        <div class="flex py-20 flex-col items-center gap-4">
             <div class="font-bold text-2xl">Results</div>
             <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10"> <?
 

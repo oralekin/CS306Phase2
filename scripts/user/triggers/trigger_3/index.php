@@ -41,7 +41,7 @@
         Valid: Kata score
       </button>
     </form>
-    <div class="flex pt-20 flex-col items-center gap-4">
+    <div class="flex py-20 flex-col items-center gap-4">
       <?php if (($_SERVER["REQUEST_METHOD"] == 'POST') && !empty($_POST['query'])) {
         ?>
         <div class="font-bold text-2xl">Results</div>

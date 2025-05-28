@@ -46,7 +46,7 @@ echo "jId: " . $event2[0] . " (" . $event2[1] . ", " . $event2[4] .", ". $event2
 <button value="ok" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Invalid teacher</button>
 <button value="notValid" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Valid teacher</button>
 </form>
-<div class="flex pt-20 flex-col items-center gap-4">
+<div class="flex py-20 flex-col items-center gap-4">
 <div class="font-bold text-2xl">Results</div>
 <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10"> 
 <?
