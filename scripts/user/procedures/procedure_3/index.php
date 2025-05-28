@@ -15,7 +15,7 @@
     <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Procedure <div
         class="text-5xl text-red-400 rotate-45">3</div>
     </h1>
-    <div class="font-bold text-md text-gray-400">By Thorfinn Thorsson</div>
+    <div class="font-bold text-md text-gray-400">By Ekin Oral</div>
     <p class="max-w-xl text-sm">This stored procedure returns the id, gross income, and name of judo event in the
       database
       that made the most gross income from participant entry fees. The gross income is found by

@@ -31,9 +31,8 @@
                 </a>
                 <a href="/user/triggers/trigger_3" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                     <div class="font-bold underline text-indigo-500">Trigger 3</div>
-                    <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
-
-
+                    <div class="font-bold text-sm text-gray-400">By Ekin Oral</div>
+                    <div class=" text-xs text-gray-400 w-60">PlayedScore instances must be one of kata or 1v1 score, not both.</div>
                 </a>
 
 
@@ -55,8 +54,8 @@
                 </a>
                 <a href="/user/procedures/procedure_3" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                     <div class="font-bold underline text-indigo-500">Procedure 3</div>
-                    <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
-
+                    <div class="font-bold text-sm text-gray-400">By Ekin Oral</div>
+                    <div class=" text-xs text-gray-400 w-60">input: N/A<br /> output: information of event with highest gross income</div>
                 </a>
 
             </div>
