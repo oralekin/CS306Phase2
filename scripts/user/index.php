@@ -24,7 +24,8 @@
                 </a>
                 <a href="/user/triggers/trigger_2" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                     <div class="font-bold underline text-indigo-500">Trigger 2</div>
-                    <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
+                    <div class="font-bold text-sm text-gray-400">By Edoardo Cecca</div>
+                    <div class=" text-xs text-gray-400 w-60">a judoka match must have a black belt to teach in a dojo</div>
 
 
                 </a>
@@ -48,7 +49,7 @@
                 </a>
                 <a href="/user/procedures/procedure_2" class="border-2 border-gray-200 rounded-xl p-3 hover:border-indigo-500 flex flex-col items-center">
                     <div class="font-bold underline text-indigo-500">Procedure 2</div>
-                    <div class="font-bold text-sm text-gray-400">By Thorfinn Thorsson</div>
+                    <div class="font-bold text-sm text-gray-400">By Edoardo Cecca</div>
                     <div class=" text-xs text-gray-400 w-60">input: match id<br /> output: The winner of the match with that particular id</div>
 
                 </a>

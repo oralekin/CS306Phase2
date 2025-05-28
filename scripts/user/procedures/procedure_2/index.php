@@ -25,25 +25,34 @@ if (mysqli_connect_errno()) {
         <a href="/user" class="text-indigo-400 text-sm hover:text-gray-500 underline ">Back</a>
         <h1 class="font-bold text-4xl flex gap-2 items-center justify-center">Procedure <div class="text-5xl text-red-400 rotate-45">2</div>
         </h1>
-        <div class="font-bold text-md text-gray-400">By Thorfinn Thorsson</div>
+        <div class="font-bold text-md text-gray-400">By Edoardo Cecca</div>
         <p class="max-w-xl text-sm">This stored procedure takes in one integer parameter, a match id, and returns the match id,
             total points, point composition and the name of the judoka who won the match. This stored
             procedure implements the calculation to get total score from score components, as well as
             checking for forfeits. The script for this is included below.</p>
         <form method="post" class="flex gap-2 items-end ">
-            <div class="flex flex-col"><label for="start">Match id:</label><input value="" name="start" class="bg-white border-2 border-gray-300 min-w-50 rounded-xl" /></div>
-
-					<select
-						name="match"
-						id="match"
-						class="border-2 border-gray-200 rounded-lg"
-						onchange="enableButton(1)"
+<div class="flex flex-col"><label for="start">Match id:</label>
+<select
+name="start"
+value=""
+id="start"
+class="border-2 border-gray-200 rounded-lg"
+onchange="enableButton(1)"
 >
 <?
-
+$event = mysqli_query($con, "CALL versus();");
+while($row = $event->fetch_row()){
+    echo sprintf(
+        '<option value="%s">%s vs %s</option>',
+        htmlspecialchars($row[0]),
+        htmlspecialchars($row[1]),
+        htmlspecialchars($row[2])
+    );
+}
 ?>
 
 </select>
+
             
             <button value="fire" type="submit" name="fire" class="bg-indigo-500 border-2 border-indigo-400  text-white p-2 cursor-pointer active:scale-95 rounded-xl font-bold">Test Procedure</button>
         
@@ -52,16 +61,39 @@ if (mysqli_connect_errno()) {
             <div class="font-bold text-2xl">Results</div>
 <div class="max-w-4xl border-2 border-black rounded-xl px-15 py-10">
             
-                <?
-                if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
-                    $query = "CALL check_winner(" . $_POST["start"] . ");";
-                    $result = mysqli_query($con, $query);                     
-                    echo "Winner: " . $result->fetch_row()[5];
-                } else {
-                    echo  "Select a match!";
-                }
+<?
 
-                ?>
+$event->free_result();
+while ($con->more_results() && $con->next_result()) {
+    if ($extra_result = $con->store_result()) {
+        $extra_result->free_result();
+    }
+}
+
+
+
+if (isset($_POST['fire']) && isset($_POST["start"]) && is_numeric($_POST["start"])) {
+    $match_id = (int)$_POST["start"];
+
+    $result = mysqli_query($con, "CALL check_winner($match_id);");
+
+    if ($result) {
+        $row = $result->fetch_row();
+        echo "Winner: " . htmlspecialchars($row[5] ?? 'N/A');
+
+        $result->free_result();
+        while ($con->more_results() && $con->next_result()) {
+            if ($extra_result = $con->store_result()) {
+                $extra_result->free_result();
+            }
+        }
+    } else {
+        echo "Errore nella query: " . mysqli_error($con);
+    }
+} else {
+    echo "Select a match!";
+}
+?>
         </div>
 </div>
 </div>
